@@ -12,7 +12,7 @@ let DUMMY_USERS = [
 
 const getUsers = (req, res, next) => {
     if (DUMMY_USERS.length === 0) {
-        throw new HttpError('Empty data :(');
+        return next(new HttpError('Empty data :('));
     }
     res.status(200)
         .json({ users: DUMMY_USERS });
@@ -22,7 +22,7 @@ const getUserById = (req, res, next) => {
     const userId = req.params.uid;
     const user = DUMMY_USERS.find(p => p.id === userId);
     if (user === undefined) {
-        throw new HttpError('Could not find the user for the provided id.', 404);
+        return next(new HttpError('Could not find the user for the provided id.', 404));
     }
     res.status(200)
         .json({ user });
@@ -53,7 +53,7 @@ const login = (req, res, next) => {
     } = req.body;
     const identifiedUser = DUMMY_USERS.find(u => u.email === email);
     if (identifiedUser === undefined || identifiedUser.password !== password) {
-        throw new HttpError('Could not identify user, check your credentials.', 401);
+        return next(new HttpError('Could not identify user, check your credentials.', 401));
     }
 
     res.json({ message: 'Logged In' });
