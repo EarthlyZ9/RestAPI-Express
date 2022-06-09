@@ -22,6 +22,7 @@ const getPlaceById = (req, res, next) => {
         return next(
             new HttpError("Could not find a place for the provided id.", 404)
         );
+
     }
     res.json({ place }); // {place} ==> {place: place}
 };

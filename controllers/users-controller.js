@@ -24,6 +24,8 @@ const getUserById = (req, res, next) => {
         return next(
             new HttpError("Could not find the user for the provided id.", 404)
         );
+
+
     }
     res.status(200).json({ user });
 };
