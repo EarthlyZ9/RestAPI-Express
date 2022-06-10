@@ -1,5 +1,6 @@
 const HttpError = require("../models/http-error");
 const { v4: uuidv4 } = require("uuid");
+const { validationResult } = require("express-validator");
 
 let DUMMY_USERS = [
     {
@@ -24,13 +25,15 @@ const getUserById = (req, res, next) => {
         return next(
             new HttpError("Could not find the user for the provided id.", 404)
         );
-
-
     }
     res.status(200).json({ user });
 };
 
 const signup = (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return next(new HttpError(errors.array()[0].msg), 442);
+    }
     const { name, email, password } = req.body;
     const newUser = {
         id: uuidv4(),
@@ -43,7 +46,10 @@ const signup = (req, res, next) => {
 };
 
 const login = (req, res, next) => {
-    // TODO: authentication needed
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return next(new HttpError(errors.array()[0].msg), 442);
+    }
     const { email, password } = req.body;
     const identifiedUser = DUMMY_USERS.find((u) => u.email === email);
     if (identifiedUser === undefined || identifiedUser.password !== password) {
