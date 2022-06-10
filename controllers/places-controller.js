@@ -1,5 +1,6 @@
 const HttpError = require("../models/http-error");
 const { v4: uuidv4 } = require("uuid");
+const { validationResult } = require("express-validator");
 
 let DUMMY_PLACES = [
     {
@@ -22,7 +23,6 @@ const getPlaceById = (req, res, next) => {
         return next(
             new HttpError("Could not find a place for the provided id.", 404)
         );
-
     }
     res.json({ place }); // {place} ==> {place: place}
 };
@@ -47,7 +47,11 @@ const getPlacesByUserId = (req, res, next) => {
 };
 
 const createPlace = (req, res, next) => {
-    // TODO: validation needed
+    const errors = validationResult(req);
+    // console.log(errors);
+    if (!errors.isEmpty()) {
+        return next(new HttpError(errors.array()[0].msg, 442));
+    }
     const { title, description, coordinates, address, creator } = req.body;
     const createdPlace = {
         id: uuidv4(),
@@ -62,6 +66,10 @@ const createPlace = (req, res, next) => {
 };
 
 const updatePlaceById = (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return next(new HttpError(errors.array()[0].msg, 442));
+    }
     const { title, description } = req.body;
     const placeId = req.params.pid;
     const updatedPlace = { ...DUMMY_PLACES.find((p) => p.id === placeId) }; //copy
@@ -75,6 +83,9 @@ const updatePlaceById = (req, res, next) => {
 
 const deletePlace = (req, res, next) => {
     const placeId = req.params.pid;
+    if (!DUMMY_PLACES.find((p) => p.id === placeId)) {
+        return next(new HttpError("Could not find a place for that id.", 404));
+    }
     DUMMY_PLACES = DUMMY_PLACES.filter((p) => p.id !== placeId); //이 조건에 일치하는 값만 추출
     res.status(200).json({ message: "Successfully deleted." });
 };
