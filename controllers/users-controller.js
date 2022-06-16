@@ -44,7 +44,7 @@ const signup = async (req, res, next) => {
     if (!errors.isEmpty()) {
         return next(new HttpError(errors.array()[0].msg), 442);
     }
-    const { name, email, password, places } = req.body;
+    const { name, email, password } = req.body;
     let existingUser;
     try {
         existingUser = await User.findOne({ email: email });
@@ -61,7 +61,7 @@ const signup = async (req, res, next) => {
         email,
         password,
         image: "https://webimages.mongodb.com/_com_assets/cms/kuzt9r42or1fxvlq2-Meta_Generic.png",
-        places,
+        places: [], //places array will be automatically added
     });
 
     try {
