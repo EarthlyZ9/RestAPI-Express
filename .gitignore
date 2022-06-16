@@ -1,0 +1,7 @@
+.prettierrc.json
+.idea
+.DS_Store
+.husky
+.eslintrc.js
+node_modules
+.git
