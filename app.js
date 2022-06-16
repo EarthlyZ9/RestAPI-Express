@@ -1,4 +1,5 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const HttpError = require("./models/http-error");
 
 const app = express();
@@ -21,4 +22,13 @@ app.use((error, req, res, next) => {
     res.json({ message: error.message || "An unknown error occurred!" });
 });
 
-app.listen(4000);
+mongoose
+    .connect(
+        "mongodb+srv://linda2927:linda2927!@express-api.n8rxcmf.mongodb.net/jisoo?retryWrites=true&w=majority&maxPoolSize=20"
+    )
+    .then(() => {
+        app.listen(4000);
+    })
+    .catch((err) => {
+        console.log(err);
+    });
