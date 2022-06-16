@@ -5,6 +5,7 @@ const getCoordsForAddress = require("../util/google-location");
 const Place = require("../models/places");
 const User = require("../models/users");
 
+
 const getAllPlaces = async (req, res, next) => {
     let places;
     try {
@@ -91,6 +92,7 @@ const createPlace = async (req, res, next) => {
     } catch (error) {
         return next(error);
     }
+
 
     const newPlace = new Place({
         title,
