@@ -5,12 +5,17 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const getUsers = async (req, res, next) => {
+    // #swagger.tags = ['User']
+    // #swagger.summary = 'List all users'
+    // #swagger.operationId = 'getUsers'
+    // #swagger.responses[200] = { description: 'OK' }
+    // #swagger.responses[500] = { description: 'Something went wrong, please try again.' }
     let users;
     try {
         users = await User.find({}, "-password");
     } catch (err) {
         const error = new HttpError(
-            "Something went wrong, please try again",
+            "Something went wrong, please try again.",
             500
         );
         return next(error);
@@ -22,6 +27,13 @@ const getUsers = async (req, res, next) => {
 };
 
 const getUserById = async (req, res, next) => {
+    // #swagger.tags = ['User']
+    // #swagger.summary = 'Get user by Id'
+    // #swagger.operationId = 'getUserById'
+    // #swagger.responses[200] = { description: 'OK' }
+    // #swagger.responses[404] = { description: 'Could not find the user for the provided id.' }
+    // #swagger.responses[500] = { description: 'Something went wrong, please try again.' }
+
     const userId = req.params.uid;
     let user;
     try {
@@ -42,6 +54,30 @@ const getUserById = async (req, res, next) => {
 };
 
 const signup = async (req, res, next) => {
+    // #swagger.tags = ['User']
+    // #swagger.summary = 'User sign up'
+    // #swagger.operationId = 'signup'
+    /* #swagger.requestBody = {
+              required: true,
+              content: {
+                  "application/json": {
+                      schema: { $ref: "#/components/schemas/User" },
+                  }
+              }
+          }
+        */
+    /* #swagger.responses[201] = {
+                description: 'Created user',
+                schema: {
+                    name: 'Jhon Doe',
+                    email: 'example@com',
+                    token: 'jwt'
+                }
+    } */
+    // #swagger.responses[422] = { description: 'User with the email exists already.' }
+    // #swagger.responses[442] = { description: 'Custom error message from express-validator.' }
+    // #swagger.responses[500] = { description: 'Sign up failed, please try again.' }
+
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return next(new HttpError(errors.array()[0].msg), 442);
@@ -63,7 +99,7 @@ const signup = async (req, res, next) => {
     try {
         hashedPassword = await bcrypt.hash(password, 12);
     } catch (err) {
-        const error = new HttpError("Could not create user, please try again.", 500);
+        const error = new HttpError("Sign up failed, please try again.", 500);
         return next(error);
     }
 
@@ -80,7 +116,7 @@ const signup = async (req, res, next) => {
         await newUser.save();
     } catch (err) {
         const error = new HttpError(
-            "Creating user failed, please try again.",
+            "Sign up failed, please try again.",
             500
         );
         return next(error);
@@ -94,7 +130,7 @@ const signup = async (req, res, next) => {
             { expiresIn: "1h" }
         );
     } catch (err) {
-        const error = new HttpError("Sign up failed, please try again later.", 500);
+        const error = new HttpError("Sign up failed, please try again.", 500);
         return next(error);
     }
 
@@ -103,6 +139,14 @@ const signup = async (req, res, next) => {
 };
 
 const login = async (req, res, next) => {
+    // #swagger.tags = ['User']
+    // #swagger.summary = 'User login'
+    // #swagger.operationId = 'login'
+    // #swagger.responses[200] = { description: 'OK' }
+    // #swagger.responses[401] = { description: 'Invalid credentials.' }
+    // #swagger.responses[442] = { description: 'Custom error message from express-validator.' }
+    // #swagger.responses[500] = { description: 'Log in failed, please try again.' }
+
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return next(new HttpError(errors.array()[0].msg), 442);
@@ -124,7 +168,7 @@ const login = async (req, res, next) => {
     try {
         isValidPassword = await bcrypt.compare(password, existingUser.password);
     } catch (err) {
-        const error = new HttpError("Could not log you in, please check your credentials.", 500);
+        const error = new HttpError("Log in failed, please try again.", 500);
         return next(error);
     }
 
@@ -141,7 +185,7 @@ const login = async (req, res, next) => {
             { expiresIn: "1h" }
         );
     } catch (err) {
-        const error = new HttpError("Log in failed, please try again later.", 500);
+        const error = new HttpError("Log in failed, please try again.", 500);
         return next(error);
     }
 

@@ -23,7 +23,6 @@ const userSchema = new mongoose.Schema({
     places: [
         {
             type: mongoose.Types.ObjectId,
-            required: true,
             ref: "Place",
         },
     ],
