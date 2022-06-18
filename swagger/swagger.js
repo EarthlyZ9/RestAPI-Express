@@ -43,7 +43,42 @@ const options = {
                         "type": "string"
                     },
                     places: {
-                        "type": "object"
+                        "type": "array"
+                    }
+                }
+            },
+            Place: {
+                type: "object",
+                required: ["name", "email", "password", "image"],
+                properties: {
+                    _id: {
+                        "type": "string"
+                    },
+                    title: {
+                        "type": "string"
+                    },
+                    description: {
+                        "type": "string"
+                    },
+                    image: {
+                        "type": "string"
+                    },
+                    address: {
+                        "type": "string"
+                    },
+                    location: {
+                        "type": "object",
+                        "properties": {
+                            lat: {
+                                "type": "integer"
+                            },
+                            lng: {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    creator: {
+                        "type": "string"
                     }
                 }
             }

@@ -55,7 +55,8 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "user id"
           }
         ],
         "responses": {
@@ -196,16 +197,32 @@
     },
     "/api/places/": {
       "get": {
+        "tags": [
+          "Place"
+        ],
+        "summary": "List all places",
         "description": "",
+        "operationId": "getAllPlaces",
         "parameters": [],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "204": {
+            "description": "Empty data :("
+          },
+          "500": {
+            "description": "Could not fetch data, please try again."
           }
         }
       },
       "post": {
+        "tags": [
+          "Place"
+        ],
+        "summary": "Create place",
         "description": "",
+        "operationId": "getPlaceByUserId",
         "parameters": [
           {
             "name": "authorization",
@@ -217,28 +234,33 @@
         ],
         "responses": {
           "201": {
-            "description": "Created"
+            "description": "Created place",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Place"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Place"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Could not find a user for provided id."
+          },
+          "500": {
+            "description": "Something went wrong, please try again."
           }
         },
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "title": {
-                    "example": "any"
-                  },
-                  "description": {
-                    "example": "any"
-                  },
-                  "address": {
-                    "example": "any"
-                  },
-                  "creator": {
-                    "example": "any"
-                  }
-                }
+                "$ref": "#/components/schemas/Place"
               }
             }
           }
@@ -261,7 +283,12 @@
         "responses": {}
       },
       "patch": {
+        "tags": [
+          "Place"
+        ],
+        "summary": "Update place by Id",
         "description": "",
+        "operationId": "updatePlaceById",
         "parameters": [
           {
             "name": "pid",
@@ -281,7 +308,51 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Update title and description of a place",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "Empire State Building"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "ny"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "Empire State Building"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "ny"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Could not find a place for provided id."
+          },
+          "500": {
+            "description": "Something went wrong, please try again."
           }
         },
         "requestBody": {
@@ -290,10 +361,10 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "title": {
+                  "description": {
                     "example": "any"
                   },
-                  "description": {
+                  "schema": {
                     "example": "any"
                   }
                 }
@@ -303,7 +374,12 @@
         }
       },
       "delete": {
+        "tags": [
+          "Place"
+        ],
+        "summary": "Delete place by Id",
         "description": "",
+        "operationId": "deletePlace",
         "parameters": [
           {
             "name": "pid",
@@ -323,7 +399,10 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Successfully deleted."
+          },
+          "500": {
+            "description": "Something went wrong, please try again."
           }
         }
       }
@@ -419,7 +498,7 @@
                 "properties": {
                   "type": {
                     "type": "string",
-                    "example": "object"
+                    "example": "array"
                   }
                 }
               }
@@ -428,6 +507,121 @@
         },
         "xml": {
           "name": "User"
+        }
+      },
+      "Place": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "object"
+          },
+          "required": {
+            "type": "array",
+            "example": [
+              "name",
+              "email",
+              "password",
+              "image"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "properties": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "string"
+                  }
+                }
+              },
+              "title": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "string"
+                  }
+                }
+              },
+              "description": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "string"
+                  }
+                }
+              },
+              "image": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "string"
+                  }
+                }
+              },
+              "address": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "string"
+                  }
+                }
+              },
+              "location": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "object"
+                  },
+                  "properties": {
+                    "type": "object",
+                    "properties": {
+                      "lat": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "example": "integer"
+                          }
+                        }
+                      },
+                      "lng": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "example": "integer"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "creator": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "xml": {
+          "name": "Place"
         }
       }
     },
