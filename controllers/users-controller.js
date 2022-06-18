@@ -32,6 +32,7 @@ const getUserById = async (req, res, next) => {
     // #swagger.operationId = 'getUserById'
     /* #swagger.parameters['uid'] = {
             description: "user id",
+            in: "path",
             required: true,
             type: "string",
     } */
