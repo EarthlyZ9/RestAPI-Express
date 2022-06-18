@@ -30,6 +30,11 @@ const getUserById = async (req, res, next) => {
     // #swagger.tags = ['User']
     // #swagger.summary = 'Get user by Id'
     // #swagger.operationId = 'getUserById'
+    /* #swagger.parameters['uid'] = {
+            description: "user id",
+            required: true,
+            type: "string",
+    } */
     // #swagger.responses[200] = { description: 'OK' }
     // #swagger.responses[404] = { description: 'Could not find the user for the provided id.' }
     // #swagger.responses[500] = { description: 'Something went wrong, please try again.' }
