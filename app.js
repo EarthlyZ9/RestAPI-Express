@@ -1,3 +1,5 @@
+const fs = require("fs");
+const path = require("path");
 const express = require("express");
 const mongoose = require("mongoose");
 const HttpError = require("./models/http-error");
@@ -9,6 +11,9 @@ const swaggerFile = require("./swagger/swagger-output.json");
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+app.use("/uploads/images/users", express.static(path.join("uploads", "images", "users")));
+app.use("/uploads/images/places", express.static(path.join("uploads", "images", "places")));
 
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -30,7 +35,12 @@ app.use((req, res, next) => {
 });
 
 app.use((error, req, res, next) => {
-    if (res.headersSent) {
+    if (req.file) {
+        fs.unlink(req.file.path, err => {
+            console.log(err);
+        });
+    }
+    if (res.headerSent) {
         return next(error);
     }
     res.status(error.code || 500);
