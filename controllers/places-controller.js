@@ -137,7 +137,7 @@ const createPlace = async (req, res, next) => {
         return next(new HttpError(errors.array()[0].msg, 442));
     }
 
-    const { title, description, address, creator } = req.body;
+    const { title, description, address } = req.body;
 
     let coordinates;
     try {
@@ -154,12 +154,12 @@ const createPlace = async (req, res, next) => {
         //image: req.file.path,
         location: coordinates,
         address,
-        creator,
+        creator: req.userData.userId,
     });
 
     let user;
     try {
-        user = await User.findById(creator);
+        user = await User.findById(req.userData.userId);
     } catch (err) {
         const error = new HttpError(
             "Something went wrong, please try again. 1",
@@ -248,7 +248,7 @@ const updatePlaceById = async (req, res, next) => {
         const error = new HttpError("Could not find a place with provided id.", 404);
         return next(error);
     }
-    
+
     // updatedPlace.creator 는 몽구스 object 이기 때문에 toString()
     if (updatedPlace.creator.toString() !== req.userData.userId) {
         const error = new HttpError(
