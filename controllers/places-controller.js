@@ -259,7 +259,7 @@ const deletePlace = async (req, res, next) => {
     let place;
     try {
         // also search for creator field
-        // give full access to the object itself using the creator attrubute
+        // give full access to the object itself using the creator attribute
         place = await Place.findById(placeId).populate("creator");
     } catch (err) {
         const error = new HttpError(
