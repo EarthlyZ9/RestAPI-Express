@@ -1,3 +1,4 @@
+require("dotenv").config();
 const HttpError = require("../models/http-error");
 const { validationResult } = require("express-validator");
 const User = require("../models/users");
@@ -132,7 +133,8 @@ const signup = async (req, res, next) => {
     try {
         token = await jwt.sign(
             { userId: newUser.id, email: newUser.email },
-            "super_secret_don't_share",
+            // eslint-disable-next-line no-undef
+            process.env.JWT_SECRET_KEY,
             { expiresIn: "1h" }
         );
     } catch (err) {
@@ -187,7 +189,8 @@ const login = async (req, res, next) => {
     try {
         token = await jwt.sign(
             { userId: existingUser.id, email: existingUser.email },
-            "super_secret_don't_share",
+            // eslint-disable-next-line no-undef
+            process.env.JWT_SECRET_KEY,
             { expiresIn: "1h" }
         );
     } catch (err) {
