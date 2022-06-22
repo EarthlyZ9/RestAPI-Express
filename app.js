@@ -49,7 +49,8 @@ app.use((error, req, res, next) => {
 
 mongoose
     .connect(
-        "mongodb+srv://linda2927:linda2927!@express-api.n8rxcmf.mongodb.net/jisoo?retryWrites=true&w=majority&maxPoolSize=20"
+        // eslint-disable-next-line no-undef
+        `mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PW}@express-api.n8rxcmf.mongodb.net/jisoo?retryWrites=true&w=majority&maxPoolSize=20`
     )
     .then(() => {
         app.listen(4000);
