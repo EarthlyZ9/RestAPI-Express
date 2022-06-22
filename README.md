@@ -13,7 +13,7 @@ A simple Rest API with Express + MongoDB
 
 ## MERN Stack #1
 
-MERN 풀스택 이라는 험난한 여정의 첫걸음,,,
+MERN 풀스택 이라는 험난한 여정의 "첫" 걸음,,,
 
 ### 💡 Summary
 
@@ -25,7 +25,7 @@ MERN 풀스택 이라는 험난한 여정의 첫걸음,,,
 
 * 회원 관리: 로그인/로그아웃, 회원가입
 * 장소 데이터 CRUD
-* geocoding API 를 이용한 좌표 찍기
+* geocoding API 를 이용한 좌표 및 주소 반환
 * API 문서 - Swagger Ui, swagger-autogen
 * 이미지 파일 업로드
 

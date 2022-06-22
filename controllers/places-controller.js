@@ -2,7 +2,7 @@ const fs = require("fs");
 const HttpError = require("../models/http-error");
 const mongoose = require("mongoose");
 const { validationResult } = require("express-validator");
-const getCoordsForAddress = require("../util/google-location");
+const getAddressData = require("../util/google-location");
 const Place = require("../models/places");
 const User = require("../models/users");
 
@@ -139,9 +139,9 @@ const createPlace = async (req, res, next) => {
 
     const { title, description, address } = req.body;
 
-    let coordinates;
+    let addressData;
     try {
-        coordinates = await getCoordsForAddress(address);
+        addressData = await getAddressData(address);
     } catch (error) {
         return next(error);
     }
@@ -152,8 +152,8 @@ const createPlace = async (req, res, next) => {
         description,
         image: "https://image-url-dummy-data",
         //image: req.file.path,
-        location: coordinates,
-        address,
+        location: addressData.coordinates,
+        address: addressData.formatted_address,
         creator: req.userData.userId,
     });
 

@@ -1,12 +1,13 @@
 const axios = require("axios");
-const API_KEY = "AIzaSyA2tO8_zM8o-1DHhIQtZV6-44_TZeDtt_E";
 const HttpError = require("../models/http-error");
+require("dotenv").config();
 
-async function getCoordsForAddress(address) {
+async function getAddressData(address) {
     const response = await axios.get(
         `https://maps.googleapis.com/maps/api/geocode/json?language=ko&address=${encodeURIComponent(
             address
-        )}&key=${API_KEY}`
+            // eslint-disable-next-line no-undef
+        )}&key=${process.env.GEOCODING_API_KEY}`
     );
 
     const data = response.data;
@@ -17,10 +18,14 @@ async function getCoordsForAddress(address) {
             422
         );
     }
-    
-    return data.results[0].geometry.location;
+
+    const addressData = {
+        coordinates: data.results[0].geometry.location,
+        formatted_address: data.results[0].formatted_address
+    };
+
+    return addressData;
 }
 
-module.exports = getCoordsForAddress;
+module.exports = getAddressData();
 
-// TODO: Get official address for location
