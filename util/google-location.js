@@ -17,9 +17,10 @@ async function getCoordsForAddress(address) {
             422
         );
     }
-
-    const coordinates = data.results[0].geometry.location;
-    return coordinates;
+    
+    return data.results[0].geometry.location;
 }
 
 module.exports = getCoordsForAddress;
+
+// TODO: Get official address for location

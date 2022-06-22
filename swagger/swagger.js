@@ -20,6 +20,11 @@ const options = {
             name: "Place",
             description: "Managing places",
         },
+        {
+            name: "test",
+            description: "Managing test",
+        },
+
     ],
     components: {
         schemas: {

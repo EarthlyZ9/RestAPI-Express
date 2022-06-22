@@ -10,6 +10,7 @@ const getUsers = async (req, res, next) => {
     // #swagger.summary = 'List all users'
     // #swagger.operationId = 'getUsers'
     // #swagger.responses[200] = { description: 'OK' }
+    // #swagger.responses[204] = { description: 'Empty user data :(' }
     // #swagger.responses[500] = { description: 'Something went wrong, please try again.' }
     let users;
     try {
@@ -20,6 +21,10 @@ const getUsers = async (req, res, next) => {
             500
         );
         return next(error);
+    }
+
+    if (users.length === 0) {
+        return next(new HttpError("Empty user data :(", 204));
     }
 
     res.status(200).json({
@@ -115,7 +120,8 @@ const signup = async (req, res, next) => {
         name,
         email,
         password: hashedPassword,
-        image: req.file.path,
+        image: "https://external-preview.redd.it/zQjApYpllYtgki6hkeRIU8EI5J5Kx8ecCex5nr8w_UI.jpg?width=640&crop=smart&auto=webp&s=abd61efd574b8576fd31f9fb5ef25bbb9835a7cc",
+        //image: req.file.path,
         places: [], //places array will be automatically added
     });
 

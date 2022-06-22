@@ -150,8 +150,10 @@ const createPlace = async (req, res, next) => {
     const newPlace = new Place({
         title,
         description,
-        image: req.file.path,
+        image: "https://image-url-dummy-data",
+        //image: req.file.path,
         location: coordinates,
+        address,
         creator,
     });
 
@@ -160,7 +162,7 @@ const createPlace = async (req, res, next) => {
         user = await User.findById(creator);
     } catch (err) {
         const error = new HttpError(
-            "Something went wrong, please try again.",
+            "Something went wrong, please try again. 1",
             500
         );
         return next(error);
@@ -180,13 +182,27 @@ const createPlace = async (req, res, next) => {
 
         const sess = await mongoose.startSession();
         sess.startTransaction();
-        await newPlace.save({ session: sess });
+        try {
+            await newPlace.save({ session: sess });
+        } catch (err) {
+            //const error = new Error("Place not saved.");
+            return next(err);
+        }
+
         user.places.push(newPlace);
-        await user.save({ session: sess });
+
+        try {
+            await user.save({ session: sess });
+        } catch (err) {
+            //const error = new Error("user not saved");
+            return next(err);
+        }
+
+
         await sess.commitTransaction();
     } catch (err) {
         const error = new HttpError(
-            "Something went wrong, please try again.",
+            "Something went wrong, please try again. 2",
             500
         );
         return next(error);
@@ -206,6 +222,7 @@ const updatePlaceById = async (req, res, next) => {
                     description: 'ny',
                 }
     } */
+    // #swagger.responses[401] = { description: 'You are not allowed to edit this place.' }
     // #swagger.responses[404] = { description: 'Could not find a place for provided id.' }
     // #swagger.responses[500] = { description: 'Something went wrong, please try again.' }
 
@@ -231,6 +248,15 @@ const updatePlaceById = async (req, res, next) => {
         const error = new HttpError("Could not find a place with provided id.", 404);
         return next(error);
     }
+    
+    // updatedPlace.creator 는 몽구스 object 이기 때문에 toString()
+    if (updatedPlace.creator.toString() !== req.userData.userId) {
+        const error = new HttpError(
+            "You are not allowed to edit this place.",
+            401
+        );
+        return next(error);
+    }
 
     updatedPlace.title = title;
     updatedPlace.description = description;
@@ -253,6 +279,7 @@ const deletePlace = async (req, res, next) => {
     // #swagger.summary = 'Delete place by Id'
     // #swagger.operationId = 'deletePlace'
     // #swagger.responses[200] = { description: 'Successfully deleted.' }
+    // #swagger.responses[401] = { description: 'You are not allowed to delete this place.' }
     // #swagger.responses[500] = { description: 'Something went wrong, please try again.' }
 
     const placeId = req.params.pid;
@@ -271,6 +298,15 @@ const deletePlace = async (req, res, next) => {
 
     if (!place) {
         const error = new HttpError("Could not find place for this id.", 404);
+        return next(error);
+    }
+
+    // update 메소드와 달리 creator.id 쓰는 이유: creator 로 populate 해서 바로 접근 가능
+    if (place.creator.id !== req.userData.userId) {
+        const error = new HttpError(
+            "You are not allowed to delete this place.",
+            401
+        );
         return next(error);
     }
 
@@ -300,8 +336,8 @@ const deletePlace = async (req, res, next) => {
 };
 
 exports.getAllPlaces = getAllPlaces;
-exports.getPlaceByID = getPlaceById;
-exports.getPlacesByUserID = getPlacesByUserId;
+exports.getPlaceById = getPlaceById;
+exports.getPlacesByUserId = getPlacesByUserId;
 exports.createPlace = createPlace;
 exports.updatePlaceById = updatePlaceById;
 exports.deletePlace = deletePlace;

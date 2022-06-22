@@ -18,60 +18,13 @@
     {
       "name": "Place",
       "description": "Managing places"
+    },
+    {
+      "name": "test",
+      "description": "Managing test"
     }
   ],
   "paths": {
-    "/api/users/": {
-      "get": {
-        "tags": [
-          "User"
-        ],
-        "summary": "List all users",
-        "description": "",
-        "operationId": "getUsers",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Something went wrong, please try again."
-          }
-        }
-      }
-    },
-    "/api/users/{uid}": {
-      "get": {
-        "tags": [
-          "User"
-        ],
-        "summary": "Get user by Id",
-        "description": "",
-        "operationId": "getUserById",
-        "parameters": [
-          {
-            "name": "uid",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "user id"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Could not find the user for the provided id."
-          },
-          "500": {
-            "description": "Something went wrong, please try again."
-          }
-        }
-      }
-    },
     "/api/users/signup": {
       "post": {
         "tags": [
@@ -195,6 +148,72 @@
         }
       }
     },
+    "/api/users/": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "List all users",
+        "description": "",
+        "operationId": "getUsers",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Something went wrong, please try again."
+          }
+        }
+      }
+    },
+    "/api/users/{uid}": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Get user by Id",
+        "description": "",
+        "operationId": "getUserById",
+        "parameters": [
+          {
+            "name": "uid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "user id"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Could not find the user for the provided id."
+          },
+          "500": {
+            "description": "Something went wrong, please try again."
+          }
+        }
+      }
+    },
     "/api/places/": {
       "get": {
         "tags": [
@@ -269,7 +288,12 @@
     },
     "/api/places/{pid}": {
       "get": {
+        "tags": [
+          "Place"
+        ],
+        "summary": "Get place by Id",
         "description": "",
+        "operationId": "getUserById",
         "parameters": [
           {
             "name": "pid",
@@ -278,9 +302,28 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "uid",
+            "description": "user id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Could not find the user for the provided id."
+          },
+          "500": {
+            "description": "Something went wrong, please try again."
+          }
+        }
       },
       "patch": {
         "tags": [
@@ -348,6 +391,9 @@
               }
             }
           },
+          "401": {
+            "description": "You are not allowed to edit this place."
+          },
           "404": {
             "description": "Could not find a place for provided id."
           },
@@ -409,7 +455,12 @@
     },
     "/api/places/user/{uid}": {
       "get": {
+        "tags": [
+          "Place"
+        ],
+        "summary": "Retrieve places by user Id",
         "description": "",
+        "operationId": "getPlacesByUserId",
         "parameters": [
           {
             "name": "uid",
@@ -417,10 +468,21 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "user id"
           }
         ],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Could not find a place for the provided user id."
+          },
+          "500": {
+            "description": "Something went wrong, please try again."
+          }
+        }
       }
     }
   },
