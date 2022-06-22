@@ -149,8 +149,7 @@ const createPlace = async (req, res, next) => {
     const newPlace = new Place({
         title,
         description,
-        image: "https://webimages.mongodb.com/_com_assets/cms/kuzt9r42or1fxvlq2-Meta_Generic.png",
-        address,
+        image: req.file.path,
         location: coordinates,
         creator,
     });

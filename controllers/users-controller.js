@@ -114,7 +114,7 @@ const signup = async (req, res, next) => {
         name,
         email,
         password: hashedPassword,
-        image: "https://webimages.mongodb.com/_com_assets/cms/kuzt9r42or1fxvlq2-Meta_Generic.png",
+        image: req.file.path,
         places: [], //places array will be automatically added
     });
 
