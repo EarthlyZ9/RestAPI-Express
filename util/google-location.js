@@ -27,5 +27,5 @@ async function getAddressData(address) {
     return addressData;
 }
 
-module.exports = getAddressData();
+module.exports = getAddressData;
 
